@@ -9,7 +9,7 @@ mkdir -p results
 printf 'file\trecords\tfields_header\tlines_other_fields\tcrlf_lines\tfinal_newline\n' > "$out"
 for f in data/raw/*.csv; do
   if [ "$(tail -c 1 "$f" | od -An -c | tr -d ' ')" = '\n' ]; then nl=yes; else nl=no; fi
-  crlf=$(grep -c $'\r' "$f" || true)
+  crlf=$(od -An -v -c "$f" | tr -s " " "\n" | grep -c "^\\r$" || true)
   awk -F, -v name="$(basename "$f")" -v nl="$nl" -v crlf="$crlf" '
     NR==1 { h = NF }
     NF != h { other++ }

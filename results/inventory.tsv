@@ -1,9 +1,9 @@
 file	records	fields_header	lines_other_fields	crlf_lines	final_newline
-dah_completed.csv	100	4	24	101	no
-dah_d1.csv	3002	3	323	3003	yes
-dah_d2.csv	100	3	18	101	no
-dah_d3.csv	100	3	11	101	no
-dah_d4.csv	100	3	10	101	no
-dah_d5.csv	100	3	8	101	no
-matches.csv	2744	6	0	2745	yes
-web_2025-10.csv	45260	6	0	45261	yes
+dah_completed.csv	100	4	24	289	no
+dah_d1.csv	3002	3	323	5782	yes
+dah_d2.csv	100	3	18	180	no
+dah_d3.csv	100	3	11	146	no
+dah_d4.csv	100	3	10	137	no
+dah_d5.csv	100	3	8	163	no
+matches.csv	2744	6	0	2994	yes
+web_2025-10.csv	45260	6	0	59097	yes
