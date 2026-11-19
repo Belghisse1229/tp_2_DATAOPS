@@ -1,0 +1,2 @@
+# keep LF line endings everywhere (bash scripts, checksums, results compared byte by byte)
+* text=auto eol=lf

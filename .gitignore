@@ -1,0 +1,4 @@
+# raw data are downloaded (pinned + checksummed), clean data and logs are rebuilt
+data/raw/
+data/clean/
+logs/
