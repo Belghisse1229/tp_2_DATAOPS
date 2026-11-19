@@ -1,0 +1,426 @@
+### 2026-11-19T10:16:20Z bash -c gawk --version | head -n 1
+GNU Awk 5.4.1, API 4.1, PMA Avon 8-g1, (GNU MPFR 4.2.2, GNU MP 6.3.0)
+
+### 2026-11-19T10:27:09Z bash scripts/00_fetch.sh
+dah_completed.csv: OK
+dah_d1.csv: OK
+dah_d2.csv: OK
+dah_d3.csv: OK
+dah_d4.csv: OK
+dah_d5.csv: OK
+matches.csv: OK
+web_2025-10.csv: OK
+
+### 2026-11-19T10:35:00Z bash scripts/02_web_clean.sh
+
+### 2026-11-19T10:45:18Z bash scripts/01_inventory.sh
+bash: scripts/01_inventory.sh: No such file or directory
+
+2026-11-19T10:45:41Z re-fetch OK: all 8 checksums OK after deleting the incomplete web_2025-10.csv
+### 2026-11-19T11:13:55Z bash scripts/01_inventory.sh
+file	records	fields_header	lines_other_fields	crlf_lines	final_newline
+dah_completed.csv	100	4	24	0	no
+dah_d1.csv	3002	3	323	0	yes
+dah_d2.csv	100	3	18	0	no
+dah_d3.csv	100	3	11	0	no
+dah_d4.csv	100	3	10	0	no
+dah_d5.csv	100	3	8	0	no
+matches.csv	2744	6	0	0	yes
+web_2025-10.csv	45260	6	0	0	yes
+
+NOTE 1.1 matches.csv: I observed CR on 2745 of 2745 lines, so I must remove \r before using the last field (away_goals); it does not show the dates without a year.
+NOTE 1.1 dah_completed.csv: I observed 4 header fields, CR on 100 lines and no final newline, so I must drop the empty 4th column and the CRs; it does not show which lines hold quoted commas.
+NOTE 1.1 dah_d1..dah_d5: I observed 8 to 323 lines with another field count, so some fields hold commas inside quotes and need a real CSV parser (gawk FPAT); d2-d5 have no final newline, so they must not be glued with cat; it does not show doubled quotes ("") or spaces at the ends of fields.
+NOTE 1.1 web_2025-10.csv: I observed 0 shape problems (6 fields everywhere, no CR), so a plain cut is safe; it does not show empty values (city, OS) nor the quotes around every value.
+### 2026-11-19T11:17:15Z bash scripts/02_web_clean.sh
+web_clean: 45261 lines, 5 fields
+
+NOTE 1.2 I observed 45261 lines of 5 fields in web_clean.csv for 45261 lines in the source, so no row was lost and hash_src_ip is gone; it does not show that values are correct (3339 records have an empty city, kept empty).
+### 2026-11-19T11:20:30Z bash scripts/03_matches_clean.sh
+matches_clean: 2744 rows; inferred: 154
+Rule test (full dates, two-year seasons): season tested wrong
+  Championnat D1 2007/2008 130 5
+  Championnat D1 2010/2011 72 0
+  Championnat D1 2011/2012 182 0
+  Championnat D1 2012/2013 182 0
+  Championnat D1 2013/2014 30 0
+  Championnat D1 2014/2015 182 0
+  Championnat D1 2015/2016 156 0
+  Championnat D1 2016/2017 182 0
+  Ligue 1 2018/2019 182 0
+  Ligue 1 2019/2020 182 52
+  Ligue 1 2020/2021 32 0
+  Ligue 1 2021/2022 182 0
+  Ligue 1 2022/2023 182 0
+  Ligue 1 2023/2024 182 0
+  Ligue 1 2024/2025 86 0
+  Super D1 2017/2018 182 0
+  TOTAL 2326 57
+
+### 2026-11-19T11:21:06Z bash scripts/03_matches_clean.sh
+matches_clean: 2744 rows; inferred: 154
+Rule test (full dates, two-year seasons): season tested wrong
+  Championnat D1 2007/2008 130 5
+  Championnat D1 2010/2011 72 0
+  Championnat D1 2011/2012 182 0
+  Championnat D1 2012/2013 182 0
+  Championnat D1 2013/2014 30 0
+  Championnat D1 2014/2015 182 0
+  Championnat D1 2015/2016 156 0
+  Championnat D1 2016/2017 182 0
+  Ligue 1 2018/2019 182 0
+  Ligue 1 2019/2020 182 52
+  Ligue 1 2020/2021 32 0
+  Ligue 1 2021/2022 182 0
+  Ligue 1 2022/2023 182 0
+  Ligue 1 2023/2024 182 0
+  Ligue 1 2024/2025 86 0
+  Super D1 2017/2018 182 0
+  TOTAL 2326 57
+
+NOTE 1.3 I observed 154 of 2744 matches with a date without a year (date_status=inferred). Rule test: see the TOTAL line above (tested, wrong); the rule fails when a season ends after July (months listed by the check above), so an inferred year is a working hypothesis; it does not show whether the inferred dates themselves are right.
+### 2026-11-19T11:27:19Z bash scripts/04_corpus_clean.sh
+dah_d1 parser field counts: 3 
+dah_d3 parser field counts: 3 
+hass_base: 3003 lines, TSV field counts: 3 
+hass_completed: 101 lines, TSV field counts: 3 
+
+### 2026-11-19T11:28:08Z bash tp2.2026.check.sh m1
+bash: tp2.2026.check.sh: No such file or directory
+
+### 2026-11-19T11:29:09Z bash scripts/05_web_profile.sh
+records: 45260
+distinct_os_name_values (empty counts as a value): 6
+records_without_city: 3339
+pct_without_city: 7.38% (denominator 45260 records)
+pct_ios_all: 46.18% (20899 / 45260 all records)
+pct_android_all: 39.34% (17805 / 45260 all records)
+pct_mobile_all: 85.51% (38704 / 45260 all records)
+pct_ios_known_os: 46.80% (20899 / 44655 records with known os_name)
+pct_android_known_os: 39.87% (17805 / 44655 records with known os_name)
+pct_mobile_known_os: 86.67% (38704 / 44655 records with known os_name)
+top_web_client_1: Mobile Safari 14879
+top_web_client_2: Chrome Mobile 9668
+top_web_client_3: Samsung Internet 6205
+top_web_client_4: FacebookBot 4888
+top_web_client_5: Other 2361
+daily_os_counts.csv: 187 lines
+date,os_name,count
+2025-10-01,iOS,2285
+2025-10-01,Android,1986
+2025-10-02,iOS,1399
+
+NOTE 2.1 I observed a mobile share of 85.51% on all records but 86.67% on records with a known os_name, so a percentage must always be given with its denominator; it does not show the number of users (a record is a request, not a person) nor how the sample was drawn.
+### 2026-11-19T11:30:57Z bash scripts/06_web_join.sh
+web_enriched: 45261 lines (web_clean: 45261)
+unmapped clients:
+  2361 Other
+  51 Google
+  15 Android
+  1 Apple Mail
+  1 Client
+  1 PDFExpert
+class totals:
+   4888 bot
+  32956 browser
+   4597 in_app
+    389 library
+   2430 unmapped
+
+NOTE 2.2 I observed the same number of lines in web_enriched.csv as in web_clean.csv and 2430 of 45260 records unmapped, so the left join lost and duplicated no row; RIMATEL has 499 bot records of 4109; it does not show real automation: bot is based only on the client name, and Other may hide bots.
+### 2026-11-19T11:33:43Z bash scripts/08_league.sh
+bash: scripts/08_league.sh: No such file or directory
+
+### 2026-11-19T11:34:51Z bash scripts/08_league.sh
+bash: scripts/08_league.sh: No such file or directory
+
+### 2026-11-19T11:35:11Z bash scripts/08_league.sh
+bash: scripts/08_league.sh: No such file or directory
+
+### 2026-11-19T11:37:21Z bash scripts/07_web_daily.sh
+CHINGUITEL P90 threshold (rank 28 of 31): 196
+MATTEL P90 threshold (rank 28 of 31): 329
+MAURITEL P90 threshold (rank 28 of 31): 1511
+RIMATEL P90 threshold (rank 28 of 31): 215
+results/web_daily_isp_251213.csv: 124 data rows
+busy days:
+Usage: awk [POSIX or GNU style options] -f progfile [--] file ...
+Usage: awk [POSIX or GNU style options] [--] 'program' file ...
+POSIX options:		GNU long options: (standard)
+	-f progfile		--file=progfile
+	-F fs			--field-separator=fs
+	-v var=val		--assign=var=val
+Short options:		GNU long options: (extensions)
+	-b			--characters-as-bytes
+	-c			--traditional
+	-C			--copyright
+	-d[file]		--dump-variables[=file]
+	-D[file]		--debug[=file]
+	-e 'program-text'	--source='program-text'
+	-E file			--exec=file
+	-g			--gen-pot
+	-h			--help
+	-i includefile		--include=includefile
+	-I			--trace
+	-k			--csv
+	-l library		--load=library
+	-L[fatal|invalid|no-ext]	--lint[=fatal|invalid|no-ext]
+	-M			--bignum
+	-N			--use-lc-numeric
+	-n			--non-decimal-data
+	-o[file]		--pretty-print[=file]
+	-O			--optimize
+	-p[file]		--profile[=file]
+	-P			--posix
+	-r			--re-interval
+	-s			--no-optimize
+	-S			--sandbox
+	-t			--lint-old
+	-V			--version
+
+To report bugs, use the `gawkbug' program.
+For full instructions, see the node `Bugs' in `gawk.info'
+which is section `Reporting Problems and Bugs' in the
+printed version.  This same information may be found at
+https://www.gnu.org/software/gawk/manual/html_node/Bugs.html.
+PLEASE do NOT try to report bugs by posting in comp.lang.awk,
+or by using a web forum such as Stack Overflow.
+
+Source code for gawk formal releases may be obtained from
+https://ftp.gnu.org/gnu/gawk/.
+
+Source code for gawk beta releases may be obtained from
+https://www.skeeve.com/gawk/.
+
+Alpha and beta releases have a version number >= 60 or that end in a letter.
+
+gawk is a pattern scanning and processing language.
+By default it reads standard input and writes standard output.
+
+Examples:
+	awk '{ sum += $1 }; END { print sum }' file
+	awk -F: '{ print $1 }' /etc/passwd
+
+### 2026-11-19T11:40:33Z bash scripts/08_league.sh
+tables: 18 files
+season,teams,matches,expected_matches,complete
+Championnat D1 2007/2008,12,130,132,no
+Championnat D1 2009,12,132,132,yes
+Championnat D1 2010,12,132,132,yes
+Championnat D1 2010/2011,9,72,72,yes
+Championnat D1 2011/2012,14,182,182,yes
+Championnat D1 2012/2013,14,182,182,yes
+Championnat D1 2013/2014,6,30,30,yes
+Championnat D1 2014/2015,14,182,182,yes
+Championnat D1 2015/2016,13,156,156,yes
+Championnat D1 2016/2017,14,182,182,yes
+Ligue 1 2018/2019,14,182,182,yes
+Ligue 1 2019/2020,14,182,182,yes
+Ligue 1 2020/2021,8,32,56,no
+Ligue 1 2021/2022,14,182,182,yes
+Ligue 1 2022/2023,14,182,182,yes
+Ligue 1 2023/2024,14,182,182,yes
+Ligue 1 2024/2025,16,240,240,yes
+Super D1 2017/2018,14,182,182,yes
+result,matches
+home_win,1086
+away_win,901
+draw,757
+
+NOTE 2.4 I observed in Ligue 1 2021/2022 the top three: Nouadhibou 56 pts; Tevragh-Zeina 51 pts; SNIM 47 pts;  and incomplete seasons: Championnat D1 2007/2008 (130/132); Ligue 1 2020/2021 (32/56);  so these seasons cannot be compared with complete ones; it does not show the official ranking (penalties, forfeits) and complete=yes only means every pair met twice.
+### 2026-11-19T11:42:35Z bash scripts/09_corpus_profile.sh
+sentence_pairs: 3002
+distinct_english_sentences: 2985
+english_sentences_appearing_more_than_once: 16
+extra_rows_from_repeats: 17
+avg_words_per_english_sentence: 6.06 (18196 words / 3002 sentences)
+top_english_word_1: t 261
+top_english_word_2: your 217
+top_english_word_3: do 193
+top_english_word_4: s 188
+top_english_word_5: me 181
+top_english_word_6: are 165
+top_english_word_7: what 158
+top_english_word_8: that 156
+top_english_word_9: have 155
+top_english_word_10: can 149
+hassaniya_en_tokens_total: 12329
+hassaniya_en_tokens_with_digit: 5062
+hassaniya_en_distinct_tokens_with_digit: 2661
+top_hassaniya_en_token_1: mn 277
+top_hassaniya_en_token_2: ma 164
+top_hassaniya_en_token_3: v 120
+top_hassaniya_en_token_4: 4e 117
+top_hassaniya_en_token_5: chi 102
+top_hassaniya_en_token_6: w 91
+top_hassaniya_en_token_7: 3le 90
+top_hassaniya_en_token_8: lahi 90
+top_hassaniya_en_token_9: li 78
+top_hassaniya_en_token_10: lehi 75
+hass_backlog: 400 rows
+status,rows
+filled,99
+in_base,3
+prefilled,3
+todo,295
+
+NOTE 2.5 I observed 295 of 400 contribution rows still todo and 17 extra rows from repeated English sentences in the base, so the backlog is mostly untranslated and the base should be de-duplicated; it does not show near-duplicates (case, punctuation, typos) nor translation quality.
+### 2026-11-19T11:42:56Z bash tp2.2026.check.sh m2
+bash: tp2.2026.check.sh: No such file or directory
+
+### 2026-11-19T11:52:55Z bash -c rm -rf data/clean results logs && bash scripts/run_all.sh; echo "exit code: $?"
+2026-11-19T11:52:56Z START 00_fetch.sh
+dah_completed.csv: OK
+dah_d1.csv: OK
+dah_d2.csv: OK
+dah_d3.csv: OK
+dah_d4.csv: OK
+dah_d5.csv: OK
+matches.csv: OK
+web_2025-10.csv: OK
+2026-11-19T11:52:56Z DONE 00_fetch.sh
+2026-11-19T11:52:56Z START 01_inventory.sh
+file	records	fields_header	lines_other_fields	crlf_lines	final_newline
+dah_completed.csv	100	4	24	101	no
+dah_d1.csv	3002	3	323	3003	yes
+dah_d2.csv	100	3	18	101	no
+dah_d3.csv	100	3	11	101	no
+dah_d4.csv	100	3	10	101	no
+dah_d5.csv	100	3	8	101	no
+matches.csv	2744	6	0	2745	yes
+web_2025-10.csv	45260	6	0	45261	yes
+2026-11-19T11:52:58Z DONE 01_inventory.sh
+2026-11-19T11:52:58Z START 02_web_clean.sh
+web_clean: 45261 lines, 5 fields
+2026-11-19T11:52:59Z DONE 02_web_clean.sh
+2026-11-19T11:52:59Z START 03_matches_clean.sh
+matches_clean: 2744 rows; inferred: 154
+Rule test (full dates, two-year seasons): season tested wrong
+  Championnat D1 2007/2008 130 5
+  Championnat D1 2010/2011 72 0
+  Championnat D1 2011/2012 182 0
+  Championnat D1 2012/2013 182 0
+  Championnat D1 2013/2014 30 0
+  Championnat D1 2014/2015 182 0
+  Championnat D1 2015/2016 156 0
+  Championnat D1 2016/2017 182 0
+  Ligue 1 2018/2019 182 0
+  Ligue 1 2019/2020 182 52
+  Ligue 1 2020/2021 32 0
+  Ligue 1 2021/2022 182 0
+  Ligue 1 2022/2023 182 0
+  Ligue 1 2023/2024 182 0
+  Ligue 1 2024/2025 86 0
+  Super D1 2017/2018 182 0
+  TOTAL 2326 57
+2026-11-19T11:52:59Z DONE 03_matches_clean.sh
+2026-11-19T11:52:59Z START 04_corpus_clean.sh
+dah_d1 parser field counts: 3 
+dah_d3 parser field counts: 3 
+hass_base: 3003 lines, TSV field counts: 3 
+hass_completed: 101 lines, TSV field counts: 3 
+2026-11-19T11:53:00Z DONE 04_corpus_clean.sh
+2026-11-19T11:53:00Z START 05_web_profile.sh
+records: 45260
+distinct_os_name_values (empty counts as a value): 6
+records_without_city: 3339
+pct_without_city: 7.38% (denominator 45260 records)
+pct_ios_all: 46.18% (20899 / 45260 all records)
+pct_android_all: 39.34% (17805 / 45260 all records)
+pct_mobile_all: 85.51% (38704 / 45260 all records)
+pct_ios_known_os: 46.80% (20899 / 44655 records with known os_name)
+pct_android_known_os: 39.87% (17805 / 44655 records with known os_name)
+pct_mobile_known_os: 86.67% (38704 / 44655 records with known os_name)
+top_web_client_1: Mobile Safari 14879
+top_web_client_2: Chrome Mobile 9668
+top_web_client_3: Samsung Internet 6205
+top_web_client_4: FacebookBot 4888
+top_web_client_5: Other 2361
+daily_os_counts.csv: 187 lines
+date,os_name,count
+2025-10-01,iOS,2285
+2025-10-01,Android,1986
+2025-10-02,iOS,1399
+2026-11-19T11:53:01Z DONE 05_web_profile.sh
+2026-11-19T11:53:01Z START 06_web_join.sh
+web_enriched: 45261 lines (web_clean: 45261)
+unmapped clients:
+  2361 Other
+  51 Google
+  15 Android
+  1 Apple Mail
+  1 Client
+  1 PDFExpert
+class totals:
+   4888 bot
+  32956 browser
+   4597 in_app
+    389 library
+   2430 unmapped
+2026-11-19T11:53:02Z DONE 06_web_join.sh
+2026-11-19T11:53:02Z START 07_web_daily.sh
+CHINGUITEL P90 threshold (rank 28 of 31): 196
+MATTEL P90 threshold (rank 28 of 31): 329
+MAURITEL P90 threshold (rank 28 of 31): 1511
+RIMATEL P90 threshold (rank 28 of 31): 215
+results/web_daily_isp_251213.csv: 124 data rows
+busy days:
+Usage: awk [POSIX or GNU style options] -f progfile [--] file ...
+Usage: awk [POSIX or GNU style options] [--] 'program' file ...
+POSIX options:		GNU long options: (standard)
+	-f progfile		--file=progfile
+	-F fs			--field-separator=fs
+	-v var=val		--assign=var=val
+Short options:		GNU long options: (extensions)
+	-b			--characters-as-bytes
+	-c			--traditional
+	-C			--copyright
+	-d[file]		--dump-variables[=file]
+	-D[file]		--debug[=file]
+	-e 'program-text'	--source='program-text'
+	-E file			--exec=file
+	-g			--gen-pot
+	-h			--help
+	-i includefile		--include=includefile
+	-I			--trace
+	-k			--csv
+	-l library		--load=library
+	-L[fatal|invalid|no-ext]	--lint[=fatal|invalid|no-ext]
+	-M			--bignum
+	-N			--use-lc-numeric
+	-n			--non-decimal-data
+	-o[file]		--pretty-print[=file]
+	-O			--optimize
+	-p[file]		--profile[=file]
+	-P			--posix
+	-r			--re-interval
+	-s			--no-optimize
+	-S			--sandbox
+	-t			--lint-old
+	-V			--version
+
+To report bugs, use the `gawkbug' program.
+For full instructions, see the node `Bugs' in `gawk.info'
+which is section `Reporting Problems and Bugs' in the
+printed version.  This same information may be found at
+https://www.gnu.org/software/gawk/manual/html_node/Bugs.html.
+PLEASE do NOT try to report bugs by posting in comp.lang.awk,
+or by using a web forum such as Stack Overflow.
+
+Source code for gawk formal releases may be obtained from
+https://ftp.gnu.org/gnu/gawk/.
+
+Source code for gawk beta releases may be obtained from
+https://www.skeeve.com/gawk/.
+
+Alpha and beta releases have a version number >= 60 or that end in a letter.
+
+gawk is a pattern scanning and processing language.
+By default it reads standard input and writes standard output.
+
+Examples:
+	awk '{ sum += $1 }; END { print sum }' file
+	awk -F: '{ print $1 }' /etc/passwd
+2026-11-19T11:53:04Z FAILED 07_web_daily.sh
+exit code: 1
+
