@@ -53,3 +53,26 @@ Token rule for `hassaniya-en`: after lowercasing, a token is a maximal run of `[
 **Evidence:** `results/isp_client_class.csv` (row `RIMATEL,bot,499`), `results/web_daily_isp_251213.csv` (sum of `records`, `mobile`, `bot` for RIMATEL), `results/web_profile.txt` (`pct_mobile_all`).
 **Limit:** `bot` is a working class based only on the client name, not a measure of automation: an automated client that calls itself a browser is counted as `browser`, and the 193 unmapped RIMATEL records (4.70 %) are not classified. The sample is a sample: we do not know how it was drawn.
 
+### 5. Busy days of the focus ISP
+**Claim:** RIMATEL is busy (records >= its nearest-rank 90th percentile, 215 = 28th of its 31 sorted daily counts) on 4 of 31 days: 2025-10-01 (463), 2025-10-02 (264), 2025-10-03 (225) and 2025-10-08 (215); 2025-10-01 is about 4 times its median day (112).
+**Evidence:** `results/web_daily_isp_251213.csv` (`busy_flag`), `scripts/07_web_daily.sh` (31 counts sorted with `sort -n`, rank = ceil(0.9 x 31) = 28).
+**Limit:** With n = 31 and rank 28, at least 4 days are always busy by construction: busy is relative to the operator's own month. The first three days are busy for all four operators, which may come from the sampling; the file does not say why.
+
+### 6. League table of the focus season and complete seasons
+**Claim:** In Ligue 1 2021/2022 (14 teams, 182 of 182 matches) the top three are Nouadhibou 56 points (+30), Tevragh-Zeina 51 (+28) and SNIM 47 (+13); 2 of 18 seasons are incomplete: Championnat D1 2007/2008 (130 of 132) and Ligue 1 2020/2021 (32 of 56).
+**Evidence:** `results/tables/Ligue_1_2021_2022.csv`, `results/season_summary.csv` (`scripts/08_league.sh`, expected = t(t-1)).
+**Limit:** Only the matches of the file are counted (no penalties or forfeits), so it may differ from the official ranking; complete=yes only means every pair met twice.
+
+### 7. Hassaniya corpus profile
+**Claim:** `dah_d1.csv` holds 3002 sentence pairs and 2985 distinct English sentences; 16 sentences appear more than once (17 extra rows); 6.06 words per English sentence; 5062 of 12329 hassaniya-en tokens (41.06 %) contain a digit.
+**Evidence:** `results/hass_profile.txt` (`scripts/09_corpus_profile.sh`: `tr -cs 'a-z' '\n'`, `sort | uniq -c`).
+**Limit:** Repeats are exact matches, so case or punctuation variants are missed; the rule `[a-z]+` cuts contractions, so `t` and `s` are in the top ten words.
+
+### 8. Translation backlog
+**Claim:** Of the 400 contribution rows (d2-d5), 295 (73.75 %) are still `todo`, 99 are `filled`, 3 are `in_base` and 3 are `prefilled`.
+**Evidence:** `results/backlog_status.csv`, `data/clean/hass_backlog.tsv` (`scripts/09_corpus_profile.sh`).
+**Limit:** Status uses exact equality of the English sentence: near-duplicates and typos are not detected, and translation quality is not checked.
+
+## Declared help
+
+- AI assistant: Claude (Anthropic), used to explain the commands step by step, to help write the stage scripts and to draft this README. I ran every command myself and can explain each of them.
