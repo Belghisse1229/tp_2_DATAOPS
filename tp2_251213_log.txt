@@ -424,3 +424,159 @@ Examples:
 2026-11-19T11:53:04Z FAILED 07_web_daily.sh
 exit code: 1
 
+### 2026-11-19T11:58:52Z bash -c rm -rf data/clean results logs && bash scripts/run_all.sh; echo "exit code: $?"
+2026-11-19T11:58:52Z START 00_fetch.sh
+dah_completed.csv: OK
+dah_d1.csv: OK
+dah_d2.csv: OK
+dah_d3.csv: OK
+dah_d4.csv: OK
+dah_d5.csv: OK
+matches.csv: OK
+web_2025-10.csv: OK
+2026-11-19T11:58:53Z DONE 00_fetch.sh
+2026-11-19T11:58:53Z START 01_inventory.sh
+file	records	fields_header	lines_other_fields	crlf_lines	final_newline
+dah_completed.csv	100	4	24	101	no
+dah_d1.csv	3002	3	323	3003	yes
+dah_d2.csv	100	3	18	101	no
+dah_d3.csv	100	3	11	101	no
+dah_d4.csv	100	3	10	101	no
+dah_d5.csv	100	3	8	101	no
+matches.csv	2744	6	0	2745	yes
+web_2025-10.csv	45260	6	0	45261	yes
+2026-11-19T11:58:55Z DONE 01_inventory.sh
+2026-11-19T11:58:55Z START 02_web_clean.sh
+web_clean: 45261 lines, 5 fields
+2026-11-19T11:58:55Z DONE 02_web_clean.sh
+2026-11-19T11:58:55Z START 03_matches_clean.sh
+matches_clean: 2744 rows; inferred: 154
+Rule test (full dates, two-year seasons): season tested wrong
+  Championnat D1 2007/2008 130 5
+  Championnat D1 2010/2011 72 0
+  Championnat D1 2011/2012 182 0
+  Championnat D1 2012/2013 182 0
+  Championnat D1 2013/2014 30 0
+  Championnat D1 2014/2015 182 0
+  Championnat D1 2015/2016 156 0
+  Championnat D1 2016/2017 182 0
+  Ligue 1 2018/2019 182 0
+  Ligue 1 2019/2020 182 52
+  Ligue 1 2020/2021 32 0
+  Ligue 1 2021/2022 182 0
+  Ligue 1 2022/2023 182 0
+  Ligue 1 2023/2024 182 0
+  Ligue 1 2024/2025 86 0
+  Super D1 2017/2018 182 0
+  TOTAL 2326 57
+2026-11-19T11:58:56Z DONE 03_matches_clean.sh
+2026-11-19T11:58:56Z START 04_corpus_clean.sh
+dah_d1 parser field counts: 3 
+dah_d3 parser field counts: 3 
+hass_base: 3003 lines, TSV field counts: 3 
+hass_completed: 101 lines, TSV field counts: 3 
+2026-11-19T11:58:57Z DONE 04_corpus_clean.sh
+2026-11-19T11:58:57Z START 05_web_profile.sh
+records: 45260
+distinct_os_name_values (empty counts as a value): 6
+records_without_city: 3339
+pct_without_city: 7.38% (denominator 45260 records)
+pct_ios_all: 46.18% (20899 / 45260 all records)
+pct_android_all: 39.34% (17805 / 45260 all records)
+pct_mobile_all: 85.51% (38704 / 45260 all records)
+pct_ios_known_os: 46.80% (20899 / 44655 records with known os_name)
+pct_android_known_os: 39.87% (17805 / 44655 records with known os_name)
+pct_mobile_known_os: 86.67% (38704 / 44655 records with known os_name)
+top_web_client_1: Mobile Safari 14879
+top_web_client_2: Chrome Mobile 9668
+top_web_client_3: Samsung Internet 6205
+top_web_client_4: FacebookBot 4888
+top_web_client_5: Other 2361
+daily_os_counts.csv: 187 lines
+date,os_name,count
+2025-10-01,iOS,2285
+2025-10-01,Android,1986
+2025-10-02,iOS,1399
+2026-11-19T11:58:58Z DONE 05_web_profile.sh
+2026-11-19T11:58:58Z START 06_web_join.sh
+web_enriched: 45261 lines (web_clean: 45261)
+unmapped clients:
+  2361 Other
+  51 Google
+  15 Android
+  1 Apple Mail
+  1 Client
+  1 PDFExpert
+class totals:
+   4888 bot
+  32956 browser
+   4597 in_app
+    389 library
+   2430 unmapped
+2026-11-19T11:58:59Z DONE 06_web_join.sh
+2026-11-19T11:58:59Z START 07_web_daily.sh
+CHINGUITEL P90 threshold (rank 28 of 31): 196
+MATTEL P90 threshold (rank 28 of 31): 329
+MAURITEL P90 threshold (rank 28 of 31): 1511
+RIMATEL P90 threshold (rank 28 of 31): 215
+results/web_daily_isp_251213.csv: 124 data rows
+busy days:
+Usage: awk [POSIX or GNU style options] -f progfile [--] file ...
+Usage: awk [POSIX or GNU style options] [--] 'program' file ...
+POSIX options:		GNU long options: (standard)
+	-f progfile		--file=progfile
+	-F fs			--field-separator=fs
+	-v var=val		--assign=var=val
+Short options:		GNU long options: (extensions)
+	-b			--characters-as-bytes
+	-c			--traditional
+	-C			--copyright
+	-d[file]		--dump-variables[=file]
+	-D[file]		--debug[=file]
+	-e 'program-text'	--source='program-text'
+	-E file			--exec=file
+	-g			--gen-pot
+	-h			--help
+	-i includefile		--include=includefile
+	-I			--trace
+	-k			--csv
+	-l library		--load=library
+	-L[fatal|invalid|no-ext]	--lint[=fatal|invalid|no-ext]
+	-M			--bignum
+	-N			--use-lc-numeric
+	-n			--non-decimal-data
+	-o[file]		--pretty-print[=file]
+	-O			--optimize
+	-p[file]		--profile[=file]
+	-P			--posix
+	-r			--re-interval
+	-s			--no-optimize
+	-S			--sandbox
+	-t			--lint-old
+	-V			--version
+
+To report bugs, use the `gawkbug' program.
+For full instructions, see the node `Bugs' in `gawk.info'
+which is section `Reporting Problems and Bugs' in the
+printed version.  This same information may be found at
+https://www.gnu.org/software/gawk/manual/html_node/Bugs.html.
+PLEASE do NOT try to report bugs by posting in comp.lang.awk,
+or by using a web forum such as Stack Overflow.
+
+Source code for gawk formal releases may be obtained from
+https://ftp.gnu.org/gnu/gawk/.
+
+Source code for gawk beta releases may be obtained from
+https://www.skeeve.com/gawk/.
+
+Alpha and beta releases have a version number >= 60 or that end in a letter.
+
+gawk is a pattern scanning and processing language.
+By default it reads standard input and writes standard output.
+
+Examples:
+	awk '{ sum += $1 }; END { print sum }' file
+	awk -F: '{ print $1 }' /etc/passwd
+2026-11-19T11:59:00Z FAILED 07_web_daily.sh
+exit code: 1
+
